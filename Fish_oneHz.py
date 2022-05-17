@@ -41,7 +41,7 @@ OBSTACLE_SPAWN_Y_NOISE = 0.5
 OBSTACLE_SPAWN_VEL_X_NOISE = 0.001
 OBSTACLE_SPAWN_VEL_Y_NOISE = 0.001
 
-OBSTACLE_RADIUS = 1.5
+OBSTACLE_RADIUS = 10
 
 def truncate(A):
 
@@ -57,7 +57,7 @@ def truncate(A):
 
 class World:
 
-    def __init__(self, pos_x, pos_y, heading, episode_length, obs_pos_x, obs_pos_y, obs_vel_x, obs_vel_y):
+    def __init__(self, pos_x, pos_y, heading, episode_length, distance, obs_vel):
 
         model = sio.loadmat('model_oneHz.mat')
 
@@ -82,17 +82,15 @@ class World:
         self.init_pos_x = pos_x
         self.init_pos_y = pos_y
 
-        self.obs_pos_x = obs_pos_x
-        self.obs_pos_y = obs_pos_y
-        self.obs_vel_x = obs_vel_x
-        self.obs_vel_y = obs_vel_y
+        self.distance_low = distance[0]
+        self.distance_high = distance[1]
+        self.obs_vel = obs_vel
 
-        self.init_obs_pos_x_low = obs_pos_x[0]
-        self.init_obs_pos_x_high = obs_pos_x[1]
-        self.init_obs_pos_y_low = obs_pos_y[0]
-        self.init_obs_pos_y_high = obs_pos_y[1]
-        self.init_obs_vel_x = obs_vel_x
-        self.init_obs_vel_y = obs_vel_y
+        # self.init_obs_pos_x_low = obs_pos_x[0]
+        # self.init_obs_pos_x_high = obs_pos_x[1]
+        # self.init_obs_pos_y_low = obs_pos_y[0]
+        # self.init_obs_pos_y_high = obs_pos_y[1]
+        self.init_obs_vel = obs_vel
 
         # step parameters
         self.cur_step = 0
@@ -109,8 +107,8 @@ class World:
 
         self.allXObs = []
         self.allYObs = []
-        self.allXObs.append(self.obs_pos_x)
-        self.allYObs.append(self.obs_pos_y)
+        # self.allXObs.append(self.obs_pos_x)
+        # self.allYObs.append(self.obs_pos_y)
 
 
         # parameters needed for consistency with gym environments
@@ -136,12 +134,17 @@ class World:
         self.pos_y = np.random.uniform(self.pos_y_low, self.pos_y_high)
         self.heading = np.random.uniform(self.heading_low, self.heading_high)
 
-        init_obs_pos_x = np.random.uniform(self.init_obs_pos_x_low, self.init_obs_pos_x_high)
-        init_obs_pos_y = np.random.uniform(self.init_obs_pos_y_low, self.init_obs_pos_y_high)
-        heading = np.random.uniform(0, np.pi/4)
-        init_obs_vel_x = self.init_obs_vel_x * np.cos(heading)
-        init_obs_vel_y = self.init_obs_vel_x * np.sin(heading)
+        distance = np.random.uniform(self.distance_low, self.distance_high)
+        init_obs_pos_x = self.pos_x + distance * np.cos(self.heading)
+        init_obs_pos_y = self.pos_y + distance * np.sin(self.heading)
+        init_obs_vel_x = -self.init_obs_vel * np.cos(self.heading)
+        init_obs_vel_y = -self.init_obs_vel * np.sin(self.heading)
 
+        # init_obs_pos_x = np.random.uniform(self.init_obs_pos_x_low, self.init_obs_pos_x_high)
+        # init_obs_pos_y = np.random.uniform(self.init_obs_pos_y_low, self.init_obs_pos_y_high)
+        # heading = np.random.uniform(0, np.pi/4)
+        # init_obs_vel_x = self.init_obs_vel_x * np.cos(heading)
+        # init_obs_vel_y = self.init_obs_vel_x * np.sin(heading)
 
         self.obs_pos_x = init_obs_pos_x + (2 * (np.random.random() - 0.5) * OBSTACLE_SPAWN_X_NOISE)
         self.obs_pos_y = init_obs_pos_y + (2 * (np.random.random() - 0.5) * OBSTACLE_SPAWN_Y_NOISE)

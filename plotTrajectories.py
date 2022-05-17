@@ -111,20 +111,19 @@ def main(argv):
 
     y_pos = [25, 35]
     heading = [math.radians(-10), math.radians(10)]
-    episode_length = 60
+    episode_length = 130
 
-    obs_pos_x = [25, 30]
-    obs_pos_y = [30, 35]
-    obs_vel_x = -0.514
-    obs_vel_y = 0
+    # obs_pos_x = [25, 30]
+    # obs_pos_y = [30, 35]
+    distance = [20, 50]
+    obs_vel = 0.514
 
     parameters = {'y_pos': y_pos, 
                   'heading': heading,
                   'episode_length': episode_length,
-                  'obs pos x': obs_pos_x,
-                  'obs pos y': obs_pos_y,
-                  'obs vel': obs_vel_x,
-                  'obstacle radius': 1.5
+                  'distance': distance,
+                  'obs vel': obs_vel,
+                  'obstacle radius': 1.0
                   }
 
     with open('parameters_2.pickle', 'wb') as handle:
@@ -133,7 +132,7 @@ def main(argv):
     # with open('parameters.pickle', 'rb') as handle:
     #     b = pickle.load(handle)
     
-    env = World(0.0, y_pos, heading, episode_length, obs_pos_x, obs_pos_y, obs_vel_x, obs_vel_y)
+    env = World(0.0, y_pos, heading, episode_length, distance, obs_vel)
 
     # set seeds
     np.random.seed(10)
@@ -154,7 +153,7 @@ def main(argv):
     allXObs = []
     allYObs = []
 
-    numTrajectories = 1000
+    numTrajectories = 1
     collisions = []
     fails = []
 
