@@ -41,7 +41,7 @@ OBSTACLE_SPAWN_Y_NOISE = 0.5
 OBSTACLE_SPAWN_VEL_X_NOISE = 0.001
 OBSTACLE_SPAWN_VEL_Y_NOISE = 0.001
 
-OBSTACLE_RADIUS = 10
+OBSTACLE_RADIUS = 0.5
 
 def truncate(A):
 
@@ -57,7 +57,7 @@ def truncate(A):
 
 class World:
 
-    def __init__(self, pos_x, pos_y, heading, episode_length, distance, obs_vel):
+    def __init__(self, pos_x, pos_y, heading, episode_length, distance, obs_vel, obs_radius):
 
         model = sio.loadmat('model_oneHz.mat')
 
@@ -85,6 +85,7 @@ class World:
         self.distance_low = distance[0]
         self.distance_high = distance[1]
         self.obs_vel = obs_vel
+        self.obs_radius = obs_radius
 
         # self.init_obs_pos_x_low = obs_pos_x[0]
         # self.init_obs_pos_x_high = obs_pos_x[1]
@@ -253,7 +254,7 @@ class World:
             terminal = True
             reward += CRASH_PENALTY
 
-        if np.sqrt(math.pow(self.pos_x - self.obs_pos_x, 2) + math.pow(self.pos_y - self.obs_pos_y, 2)) < OBSTACLE_RADIUS:
+        if np.sqrt(math.pow(self.pos_x - self.obs_pos_x, 2) + math.pow(self.pos_y - self.obs_pos_y, 2)) < self.obs_radius:
             print("crash into obstacle")
             terminal = True
             reward += CRASH_PENALTY
