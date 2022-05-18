@@ -109,15 +109,15 @@ def main(argv):
     
     model = models.load_model(input_filename)
 
-    y_pos = [25, 35]
-    heading = [math.radians(-10), math.radians(10)]
-    episode_length = 130
+    y_pos = [35, 40]
+    heading = [math.radians(-5), math.radians(5)]
+    episode_length = 50
 
     # obs_pos_x = [25, 30]
     # obs_pos_y = [30, 35]
-    distance = [20, 50]
+    distance = [45, 50]
     obs_vel = 0.514
-    obs_radius = 0.5
+    obs_radius = 1.0
 
     parameters = {'y_pos': y_pos, 
                   'heading': heading,
@@ -154,7 +154,7 @@ def main(argv):
     allXObs = []
     allYObs = []
 
-    numTrajectories = 10
+    numTrajectories = 1000
     collisions = []
     fails = []
 
@@ -214,7 +214,7 @@ def main(argv):
     with open('collisions_2', 'wb') as fp:
         pickle.dump(collisions, fp)
 
-    with open('fails_1', 'wb') as fp:
+    with open('fails_2', 'wb') as fp:
         pickle.dump(fails, fp)
 
     #w.plot_lidar()
