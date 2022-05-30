@@ -10,7 +10,7 @@ if __name__ == "__main__":
     with open(args.parameters_file, 'rb') as handle:
         parameters = pickle.load(handle)
     
-    # with open(args.parameters_file, 'wb') as handle:
-    #     pickle.dump(parameters, handle, protocol=4)
+    with open(args.parameters_file, 'wb') as handle:
+        pickle.dump(parameters, handle, protocol=4)
 
     print(parameters)
