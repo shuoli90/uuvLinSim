@@ -51,13 +51,14 @@ b5 = cdf6 - cdf5
 
 weights = norm.pdf(X, loc=mean, scale=std) / 1.0
 estimated_safety = np.mean(weights * y)
-true_safety = b1 * 0.1 + b2 * 0.3 + b3 * 0.5 + b4 * 0.7 + b5 * 0.9
+sample_safety = np.mean(y)
 M = 1 / np.sqrt(2 * np.pi) / std
 slack = M * np.sqrt(2/delta/X.shape[0])
 safety_range_low = estimated_safety - slack
 safety_range_high = estimated_safety + slack
 
-print('True safety', true_safety)
-print("Estimated safety", estimated_safety)
+print('True safety', (0.1+0.3+0.5+0.7+0.9)/5.0)
+print("Estimated safety before reweighting", sample_safety)
+print("Estimated safety after reweighting", estimated_safety)
 print('Estimated lower bound', safety_range_low)
 print('Estimated upper bound', safety_range_high)
