@@ -2,20 +2,21 @@ import numpy as np
 from scipy.stats import truncnorm
 from scipy.stats import norm
 
-delta = 0.05
+delta = 0.2
+samples = 100000
 
-X1 = np.random.uniform(0, 0.2, 4000)
-X2 = np.random.uniform(0.2, 0.4, 4000)
-X3 = np.random.uniform(0.4, 0.6, 4000)
-X4 = np.random.uniform(0.6, 0.8, 4000)
-X5 = np.random.uniform(0.8, 1.0, 4000)
+X1 = np.random.uniform(0, 0.2, int(samples/5))
+X2 = np.random.uniform(0.2, 0.4, int(samples/5))
+X3 = np.random.uniform(0.4, 0.6, int(samples/5))
+X4 = np.random.uniform(0.6, 0.8, int(samples/5))
+X5 = np.random.uniform(0.8, 1.0, int(samples/5))
 X = np.hstack([X1, X2, X3, X4, X5])
 
-y1 = np.random.binomial(1, 0.1, 4000)
-y2 = np.random.binomial(1, 0.3, 4000)
-y3 = np.random.binomial(1, 0.5, 4000)
-y4 = np.random.binomial(1, 0.7, 4000)
-y5 = np.random.binomial(1, 0.9, 4000)
+y1 = np.random.binomial(1, 0.1, int(samples/5))
+y2 = np.random.binomial(1, 0.3, int(samples/5))
+y3 = np.random.binomial(1, 0.5, int(samples/5))
+y4 = np.random.binomial(1, 0.7, int(samples/5))
+y5 = np.random.binomial(1, 0.9, int(samples/5))
 y = np.hstack([y1, y2, y3, y4, y5])
 
 z1 = np.vstack([X1, y1]).T
