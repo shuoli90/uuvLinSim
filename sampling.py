@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import truncnorm
 from scipy.stats import norm
 
-delta = 0.2
+delta = 0.1
 samples = 100000
 
 X1 = np.random.uniform(0, 0.2, int(samples/5))
@@ -54,7 +54,7 @@ estimated_safety = np.mean(weights * y)
 true_safety = b1 * 0.1 + b2 * 0.3 + b3 * 0.5 + b4 * 0.7 + b5 * 0.9
 sample_safety = np.mean(y)
 M = 1 / np.sqrt(2 * np.pi) / std
-slack = M * np.sqrt(2/delta/X.shape[0])
+slack = M * np.sqrt(2/delta/2/X.shape[0])
 safety_range_low = estimated_safety - slack
 safety_range_high = estimated_safety + slack
 

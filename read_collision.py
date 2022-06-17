@@ -4,8 +4,8 @@ import argparse
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--collision_file", type=str, default="collision_1")
-    parser.add_argument("--fail_file", type=str, default="fail_1")
+    parser.add_argument("--collision_file", type=str, default="collisions_1")
+    parser.add_argument("--fail_file", type=str, default="fails_1")
     parser.add_argument("--delta", type=float, default=0.1)
     parser.add_argument("--epsilon", type=float, default=0.1)
     args = parser.parse_args()
@@ -30,3 +30,4 @@ if __name__ == "__main__":
         print("Safe")
     else:
         print("Not safe")
+    breakpoint()
