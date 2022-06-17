@@ -60,6 +60,8 @@ slack = M * np.sqrt(2/delta/2/X.shape[0])
 safety_range_low = estimated_safety - slack
 safety_range_high = estimated_safety + slack
 
+print(f'mean:{mean}, std:{std}')
+print('bin distributions', [b1, b2, b3, b4, b5])
 print('True safety', true_safety)
 print("Estimated safety before reweighting", sample_safety)
 print("Estimated safety after reweighting", estimated_safety)

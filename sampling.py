@@ -27,8 +27,8 @@ z3 = np.vstack([X3, y3]).T
 z4 = np.vstack([X4, y4]).T
 z5 = np.vstack([X5, y5]).T
 
-mean = 0.5
-std = 0.4
+mean = 0.8
+std = 0.05
 a = 0.0
 b = 1.0
 
@@ -53,6 +53,8 @@ slack = M * np.sqrt(2/delta/2/X.shape[0])
 safety_range_low = estimated_safety - slack
 safety_range_high = estimated_safety + slack
 
+print(f'mean:{mean}, std:{std}')
+print('bin distributions', [b1, b2, b3, b4, b5])
 print('True safety', true_safety)
 print("Estimated safety before reweighting", sample_safety)
 print("Estimated safety after reweighting", estimated_safety)
