@@ -27,7 +27,7 @@ z3 = np.vstack([X3, y3]).T
 z4 = np.vstack([X4, y4]).T
 z5 = np.vstack([X5, y5]).T
 
-mean = 0.8
+mean = 0.5
 std = 0.4
 a = 0.0
 b = 1.0
@@ -44,7 +44,7 @@ b3 = cdf4 - cdf3
 b4 = cdf5 - cdf4
 b5 = cdf6 - cdf5
 
-weights = truncnorm.pdf(X, a, b, loc=mean, scale=std) / 1.0
+weights = norm.pdf(X,loc=mean, scale=std) / 1.0
 estimated_safety = np.mean(weights * y)
 true_safety = b1 * 0.1 + b2 * 0.3 + b3 * 0.5 + b4 * 0.7 + b5 * 0.9
 sample_safety = np.mean(y)
