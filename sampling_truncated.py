@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import truncnorm
 from scipy.stats import norm
 
-# Statistical verification with normal distribution as the state estimation
+# Statistical verification with truncated normal distribution as the state estimation
 
 delta = 0.05
 samples = 10000
@@ -32,12 +32,19 @@ std = 0.4
 a = 0.0
 b = 1.0
 
-cdf1 = norm.cdf(0.0, loc=mean, scale=std)
-cdf2 = norm.cdf(0.2, loc=mean, scale=std)
-cdf3 = norm.cdf(0.4, loc=mean, scale=std)
-cdf4 = norm.cdf(0.6, loc=mean, scale=std)
-cdf5 = norm.cdf(0.8, loc=mean, scale=std)
-cdf6 = norm.cdf(1.0, loc=mean, scale=std)
+# a, b = (a - mean) / std, (b - mean) / std
+cdf1 = truncnorm.cdf(0.0, a, b, loc=mean, scale=std)
+cdf2 = truncnorm.cdf(0.2, a, b, loc=mean, scale=std)
+cdf3 = truncnorm.cdf(0.4, a, b, loc=mean, scale=std)
+cdf4 = truncnorm.cdf(0.6, a, b, loc=mean, scale=std)
+cdf5 = truncnorm.cdf(0.8, a, b, loc=mean, scale=std)
+cdf6 = truncnorm.cdf(1.0, a, b, loc=mean, scale=std)
+# cdf1 = norm.cdf(0.0, loc=mean, scale=std)
+# cdf2 = norm.cdf(0.2, loc=mean, scale=std)
+# cdf3 = norm.cdf(0.4, loc=mean, scale=std)
+# cdf4 = norm.cdf(0.6, loc=mean, scale=std)
+# cdf5 = norm.cdf(0.8, loc=mean, scale=std)
+# cdf6 = norm.cdf(1.0, loc=mean, scale=std)
 b1 = cdf2 - cdf1
 b2 = cdf3 - cdf2
 b3 = cdf4 - cdf3
