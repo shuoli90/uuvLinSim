@@ -28,7 +28,7 @@ z4 = np.vstack([X4, y4]).T
 z5 = np.vstack([X5, y5]).T
 
 mean = 0.8
-std = 0.05
+std = 0.2
 a = 0.0
 b = 1.0
 
