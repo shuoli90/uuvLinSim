@@ -11,8 +11,8 @@ def compare(ar, thresh):
 epsilon = 0.1
 delta = 0.1
 
-true_states = np.loadtxt("true_state.csv", delimiter=",")
-pred_states = np.loadtxt("pred_state.csv", delimiter=",")
+true_states = np.loadtxt("true_state_1000.csv", delimiter=",")
+pred_states = np.loadtxt("pred_state_1000.csv", delimiter=",")
 
 indices = np.arange(true_states.shape[0])
 np.random.shuffle(indices)

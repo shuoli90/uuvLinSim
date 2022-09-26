@@ -55,8 +55,17 @@ class Continuous_MountainCarEnv(gym.Env):
         self.TRUECRIGHT = 1 # self.TRUECLEFT #0#1
         self.TRUEDLEFT = -0.01 # -0.01 -0.02
         self.TRUEDRIGHT = 0.02 #self.TRUEDLEFT #0#0.01
-        self.INITPOSLEFT = -0.6
+        self.INITPOSLEFT = -0.8
         self.INITPOSRIGHT = -0.4 #self.INITPOSLEFT #-0.4
+
+        # A narrower distribution
+        # self.TRUECLEFT = -1 #0.5#-1# -2 -1  # 0.2
+        # self.TRUECRIGHT = 1 # self.TRUECLEFT #0#1
+        # self.TRUEDLEFT = -0.01 # -0.01 -0.02
+        # self.TRUEDRIGHT = 0.01 #self.TRUEDLEFT #0#0.01
+        # self.INITPOSLEFT = -0.5
+        # self.INITPOSRIGHT = -0.45 #self.INITPOSLEFT #-0.4
+
 
         # PF hyperparameters 
         self.PARTCT = 4000
@@ -202,9 +211,9 @@ class Continuous_MountainCarEnv(gym.Env):
         #return np.array(self.state)
 
     def step(self, action):
-        print("____________________________________________")
-        print("Step for time =", self.time)
-        print("Steepness:", self.steepness)
+        # print("____________________________________________")
+        # print("Step for time =", self.time)
+        # print("Steepness:", self.steepness)
 
         position = self.state[0]
         velocity = self.state[1]
@@ -237,11 +246,11 @@ class Continuous_MountainCarEnv(gym.Env):
         obs_vel = velocity + self.noise_vel(position, velocity) 
         obs_state = np.array([obs_pos, obs_vel])
 
-        print("True values:")
-        print(self.state) 
+        # print("True values:")
+        # print(self.state) 
 
-        print("Observed values:") 
-        print(obs_state) 
+        # print("Observed values:") 
+        # print(obs_state) 
 
         pred_poss = []
         pred_vels = []
@@ -287,10 +296,10 @@ class Continuous_MountainCarEnv(gym.Env):
         avgd = np.average(self.particles_d, weights=normweights)
         self.pred_state.append(np.array([avg_pos, avg_vel, avgc, avgd]))
 
-        print("Weights:", len(normweights[ normweights > thresh ]))
-        print("Weight Values:", normweights[ normweights > thresh ])
-        print("C Values:", self.particles_c[ normweights > thresh ])
-        print("D Values:", self.particles_d[ normweights > thresh ])
+        # print("Weights:", len(normweights[ normweights > thresh ]))
+        # print("Weight Values:", normweights[ normweights > thresh ])
+        # print("C Values:", self.particles_c[ normweights > thresh ])
+        # print("D Values:", self.particles_d[ normweights > thresh ])
 
 
         # do not resample particles 
@@ -358,21 +367,21 @@ class Continuous_MountainCarEnv(gym.Env):
         #print("Weights:") 
         #print(self.weights) 
 
-        print("Mean c:", avgc) 
-        print("Mean d:", avgd) 
-        print("Mean i:", avgi) 
-        print("Stdev c:", stdc) 
-        print("Stdev d:", stdd) 
+        # print("Mean c:", avgc) 
+        # print("Mean d:", avgd) 
+        # print("Mean i:", avgi) 
+        # print("Stdev c:", stdc) 
+        # print("Stdev d:", stdd) 
 
-        print("Uncertainty in c:", uncertc)
-        print("Uncertainty in d:", uncertd)
+        # print("Uncertainty in c:", uncertc)
+        # print("Uncertainty in d:", uncertd)
  
         #print("Prob of c in ", self.MONINTC, ": ", prob_c) 
         #print("Prob of d in ", self.MONINTD, ": ", prob_d) 
         #print("Prob of init pos in ", self.MONINTINITPOS, ": ", prob_init_pos) 
-        print("Prob of assn (pre-uncert): ", prob_assn_pre )
-        print("Prob of assn (post-uncert, arithm mean): ", prob_assn_post1 )
-        print("Prob of assn (post-uncert, geom mean): ", prob_assn_post2 )
+        # print("Prob of assn (pre-uncert): ", prob_assn_pre )
+        # print("Prob of assn (post-uncert, arithm mean): ", prob_assn_post1 )
+        # print("Prob of assn (post-uncert, geom mean): ", prob_assn_post2 )
        
         assert(0 <= prob_assn_pre <= 1) 
 

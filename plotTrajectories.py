@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import pickle
 import math
 import sys
+from continuous_mountain_car import Continuous_MountainCarEnv
 
 def relu(x):
     relu = np.maximum(0, x)
@@ -133,18 +134,14 @@ def main(argv):
     # with open('parameters.pickle', 'rb') as handle:
     #     b = pickle.load(handle)
     
-    env = World(0.0, y_pos, heading, episode_length, distance, obs_vel, obs_radius)
+    # env = World(0.0, y_pos, heading, episode_length, distance, obs_vel, obs_radius)
+    # env2 = gym.make('MountainCarContinuous-v0').env
+    env = Continuous_MountainCarEnv()
 
     # set seeds
     np.random.seed(10)
 
     rew = 0
-
-    # prev_pos_y = env.pos_y
-
-    #observation = env.reset()
-    # observation = np.array([0, -y_pos, y_pos])
-
     u = np.array([0, 0.48556, 45])    
 
     allX = []
@@ -157,67 +154,57 @@ def main(argv):
     numTrajectories = 1000
     collisions = []
     fails = []
+    trajectories = 1000
+    episodes = 100
+    true_states = []
+    pred_states = []
+
+    init_states = []
+    predicted_inits = []
+    dones = []
 
     for step in range(numTrajectories):
 
-        print('Trajectory: ', step)
+        print("Trajectory: ", step)
 
+        # reset the environment to a random new position
         observation = env.reset()
-        init = observation
-        init_obs = [env.obs_pos_x, env.obs_pos_y]
-
-        rew = 0
+        init_state = [env.trueinitpos, 0.0, env.truec, env.trued]
+        c = env.truec
+        d = env.trued
+        init_states.append(init_state)
+        predicted_init = env.obs_to_true(env.trueinitpos, 0.0, c, d)
+        breakpoint()
 
         for e in range(episode_length):
 
-            observation, reward, done, collision = env.step(u)
-            
             u = np.radians(5) * model.predict(observation.reshape(1,len(observation)))[0]
+            observation, reward, done, info = env.step(u)
+            predicted_init =  env.obs_to_true(observation[0], observation[1], c, d)
+            predicted_inits.append(np.array([init_state[0], 
+                                             init_state[1], 
+                                             predicted_init[0],
+                                             predicted_init[1]]))
 
-            if done:
-                if e < episode_length - 1:
-                    print(init)
-                    print(init_obs)
-                    fails.append(True)
+            total_reward += reward
+
+            if observation[0] > 0.45:
+                print('Success!')
+                print('Number of steps: ' + str(e))
                 break
 
-            rew += reward
+        dones.append(done)
 
-        allX.append(env.allX)
-        allY.append(env.allY)
-        allXObs.append(env.allXObs)
-        allYObs.append(env.allYObs)
-        allR.append(rew)
-        collisions.append(collision)
+        print('Total reward: ' + str(total_reward))
+        true_states.append(env.true_state)
+        pred_states.append(env.pred_state)
 
-
-    #print(np.mean(allR))
-    #print('number of crashes: ' + str(num_unsafe))
+    np.savetxt("true_state.csv", np.vstack(true_states), delimiter=",")
+    np.savetxt("pred_state.csv", np.vstack(pred_states), delimiter=",")
+    np.savetxt("init_stat.csv", np.vstack(init_states), delimiter=",")
+    np.savetxt("true_vs_predicted_init.csv", np.vstack(predicted_inits), delimiter=",")
+    np.savetxt("done.csv", np.hstack(dones), delimiter=",")
     
-    fig = plt.figure(figsize=(12,10))
-    
-    #plt.ylim((-1,11))
-    #plt.xlim((-1.75,10.25))
-    #plt.suptitle('Simulated trajectories of the F1/10 Car', fontsize=30)
-    #plt.tick_params(labelsize=20)
-
-    env.plot_pipe()
-    for i in range(numTrajectories):
-        plt.plot(allX[i], allY[i], 'r-')
-        plt.plot(allXObs[i], allYObs[i], 'b*')
-        # plt.plot(np.array([0.0, env.PIPE_LENGTH]), np.array([0.0, 0.0]), 'b', linewidth=3)
-
-    # plt.savefig('simulations_1.pdf', format='pdf', bbox_inches = 'tight', pad_inches = 0)
-    plt.savefig("trajectories_2.png")
-    # plt.show()
-    
-    with open('collisions_2', 'wb') as fp:
-        pickle.dump(collisions, fp)
-
-    with open('fails_2', 'wb') as fp:
-        pickle.dump(fails, fp)
-
-    #w.plot_lidar()
     
 if __name__ == '__main__':
     main(sys.argv[1:])
